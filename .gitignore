@@ -1,0 +1,22 @@
+# Foundry
+out/
+cache/
+broadcast/
+
+# ABI folder (optional - uncomment if you don't want to commit ABIs)
+# abi/
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
