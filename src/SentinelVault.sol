@@ -40,8 +40,34 @@ contract SentinelVault {
     // Events
     event Deposited(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
-    event ModeChanged(uint256 oldMode, uint256 newMode);
+    event ModeChanged(
+        uint256 newMode,
+        uint256 price,
+        uint256 timestamp,
+        string reason
+    );
     event Rebalanced(uint256 mode, uint256 amount);
+
+    /**
+     * @dev Internal helper function to switch modes cleanly
+     * @param newMode The new mode to set
+     * @param price The oracle price at the time of mode change
+     * @param reason The reason for the mode change
+     */
+    function _setMode(uint256 newMode, uint256 price, string memory reason) internal {
+        if (newMode == currentMode) {
+            return;
+        }
+
+        currentMode = newMode;
+
+        emit ModeChanged(
+            newMode,
+            price,
+            block.timestamp,
+            reason
+        );
+    }
 
     /**
      * @dev Constructor initializes all contract addresses
@@ -66,8 +92,9 @@ contract SentinelVault {
         safePool = SafePool(_safePool);
         yieldPool = YieldPool(_yieldPool);
 
-        // Start in Farming mode
-        currentMode = MODE_FARMING;
+        // Start in Farming mode - emit initial mode event
+        uint256 initialPrice = oracle.getPrice();
+        _setMode(MODE_FARMING, initialPrice, "FARMING: initial deployment");
     }
 
     /**
@@ -164,14 +191,13 @@ contract SentinelVault {
 
     /**
      * @dev Rebalance funds based on current oracle price
-     * @notice Checks price and switches between Farming and Defensive modes
+     * @notice Checks price and switches between Farming, Defensive, and Emergency modes
      */
     function rebalance() external {
-        uint256 currentPrice = oracle.getPrice();
-        uint256 oldMode = currentMode;
+        uint256 price = oracle.getPrice();
         
-        if (currentPrice < PRICE_THRESHOLD) {
-            // Switch to Defensive mode
+        if (price < PRICE_THRESHOLD) {
+            // Price below threshold - switch to Defensive mode
             if (currentMode == MODE_FARMING) {
                 // Withdraw all from YieldPool
                 uint256 amount = yieldPool.withdrawAll();
@@ -182,12 +208,11 @@ contract SentinelVault {
                     safePool.deposit(amount);
                 }
                 
-                currentMode = MODE_DEFENSIVE;
-                emit ModeChanged(oldMode, MODE_DEFENSIVE);
+                _setMode(MODE_DEFENSIVE, price, "DEFENSIVE: risk detected");
                 emit Rebalanced(MODE_DEFENSIVE, amount);
             }
         } else {
-            // Switch to Farming mode
+            // Price above threshold - switch to Farming mode
             if (currentMode == MODE_DEFENSIVE) {
                 // Withdraw all from SafePool
                 uint256 amount = safePool.withdrawAll();
@@ -198,8 +223,7 @@ contract SentinelVault {
                     yieldPool.deposit(amount);
                 }
                 
-                currentMode = MODE_FARMING;
-                emit ModeChanged(oldMode, MODE_FARMING);
+                _setMode(MODE_FARMING, price, "FARMING: normal conditions");
                 emit Rebalanced(MODE_FARMING, amount);
             }
         }

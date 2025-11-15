@@ -18,15 +18,16 @@ After deploying the contracts, fill in the addresses below and share this file w
 ## Contract Addresses
 
 ### Main Contract (Frontend should use this)
-**SentinelVault:** `0x6D6F4f209AE8E03DCfC4719a5b8bA50B2fe45FDa` ← **Most important for frontend**
+**SentinelVault:** `0xBAa73083BA0604BaA69b6D59394d3177624987ca` ← **Most important for frontend**
+**Note:** Updated with mode history logging system
 
 ### Supporting Contracts
-**SafePool:** `0x00fa22EefFBb6c61F9e6286d470F2F694Fb1EFA4`
-**YieldPool:** `0xA2d5245AC4f3e622d025d82c03211A794e61709C`
-**OracleFeed:** `0x32108F6ad1d9F8f805a4E72b3C9829425FCfFb73`
+**SafePool:** `0xb90892b0143eb804037D582FE7678C636D47f0a5`
+**YieldPool:** `0xC6D145006Cd18C7b22D584737A8909DdF3b839D5`
+**OracleFeed:** `0xd8A5E7ACa9A2B61d223Ea993749B5F6576aa503f`
 
 ### Token Address
-**USDC (MockUSDC):** `0x615Fe162774b71c6fA55deC75a25F83561948a64`
+**USDC:** `0x3600000000000000000000000000000000000000`
 
 ---
 
@@ -69,11 +70,11 @@ const sentinelVault = new ethers.Contract(
 ## Block Explorer Links
 
 View your deployed contracts on Arc Testnet Explorer:
-- **SentinelVault:** https://testnet.arcscan.app/address/0x6D6F4f209AE8E03DCfC4719a5b8bA50B2fe45FDa
-- **SafePool:** https://testnet.arcscan.app/address/0x00fa22EefFBb6c61F9e6286d470F2F694Fb1EFA4
-- **YieldPool:** https://testnet.arcscan.app/address/0xA2d5245AC4f3e622d025d82c03211A794e61709C
-- **OracleFeed:** https://testnet.arcscan.app/address/0x32108F6ad1d9F8f805a4E72b3C9829425FCfFb73
-- **MockUSDC:** https://testnet.arcscan.app/address/0x615Fe162774b71c6fA55deC75a25F83561948a64
+- **SentinelVault:** https://testnet.arcscan.app/address/0xBAa73083BA0604BaA69b6D59394d3177624987ca
+- **SafePool:** https://testnet.arcscan.app/address/0xb90892b0143eb804037D582FE7678C636D47f0a5
+- **YieldPool:** https://testnet.arcscan.app/address/0xC6D145006Cd18C7b22D584737A8909DdF3b839D5
+- **OracleFeed:** https://testnet.arcscan.app/address/0xd8A5E7ACa9A2B61d223Ea993749B5F6576aa503f
+- **USDC:** https://testnet.arcscan.app/address/0x3600000000000000000000000000000000000000
 
 ---
 
